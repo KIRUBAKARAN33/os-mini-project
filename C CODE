@@ -1,0 +1,112 @@
+/*
+ * Project : Parking Database Disk Scheduler - FCFS
+ * File : parking_fcfs.c
+ * Purpose : Simulates FCFS (First Come First Serve) disk scheduling
+ * for parking entry/exit record requests.
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_REQUESTS 100 /* maximum requests allowed */
+#define MIN_CYLINDER 0 /* first cylinder of the disk */
+#define MAX_CYLINDER 199 /* last cylinder of the disk */
+
+/* Remove leftover characters from the input buffer */
+void clearInputBuffer(void)
+{
+    int ch;
+    while ((ch = getchar()) != '\n' && ch != EOF)
+        ;
+}
+
+/* Read an integer between min and max; repeat until input is valid */
+int readInt(const char *prompt, int min, int max)
+{
+    int value;
+    int result;
+
+    while (1)
+    {
+        printf("%s", prompt);
+        result = scanf("%d", &value);
+
+        if (result == EOF)
+        {
+            printf("\nInput ended unexpectedly. Exiting.\n");
+            exit(1);
+        }
+        if (result != 1)
+        {
+            printf("Invalid input! Please enter a whole number.\n");
+            clearInputBuffer();
+            continue;
+        }
+        clearInputBuffer();
+
+        if (value < min || value > max)
+        {
+            printf("Out of range! Enter a value between %d and %d.\n", min, max);
+            continue;
+        }
+        return value;
+    }
+}
+
+int main(void)
+{
+    int requests[MAX_REQUESTS];
+    int n, head, current, i;
+    int distance, total = 0;
+
+    printf("====================================================\n");
+    printf(" PARKING DATABASE DISK SCHEDULER - FCFS\n");
+    printf("====================================================\n\n");
+
+    /* Step 1: Accept input with validation */
+    head = readInt("Enter initial head position (0-199): ", MIN_CYLINDER, MAX_CYLINDER);
+    n = readInt("Enter number of disk requests (1-100): ", 1, MAX_REQUESTS);
+
+    for (i = 0; i < n; i++)
+    {
+        char prompt[50];
+        sprintf(prompt, "Enter request %d (0-199): ", i + 1);
+        requests[i] = readInt(prompt, MIN_CYLINDER, MAX_CYLINDER);
+    }
+
+    /* Step 2: Show request queue (arrival order, unchanged) */
+    printf("\n====================================================\n");
+    printf(" FCFS DISK SCHEDULING RESULT\n");
+    printf("====================================================\n");
+    printf("Initial Head Position : %d\n", head);
+    printf("Request Queue : ");
+    for (i = 0; i < n; i++)
+        printf("%d ", requests[i]);
+    printf("\n\n");
+
+    /* Step 3: Head movement sequence */
+    printf("Head Movement Sequence:\n%d", head);
+    for (i = 0; i < n; i++)
+        printf(" -> %d", requests[i]);
+    printf("\n\n");
+
+    /* Step 4: Process requests in arrival order and add distances */
+    printf("Step-by-Step Calculation:\n");
+    current = head;
+    for (i = 0; i < n; i++)
+    {
+        distance = abs(requests[i] - current);
+        total += distance;
+        printf("Step %d: %d -> %d = |%d - %d| = %d\n",
+               i + 1, current, requests[i], requests[i], current, distance);
+        current = requests[i];
+    }
+
+    /* Step 5: Display totals */
+    printf("\nTotal Head Movement : %d cylinders\n", total);
+    printf("Average Head Movement : %.2f cylinders per request\n",
+           (float)total / n);
+    printf("====================================================\n");
+
+    return 0;
+}
