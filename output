@@ -1,0 +1,35 @@
+====================================================
+   PARKING DATABASE DISK SCHEDULER - FCFS
+====================================================
+
+Enter initial head position (0-199): 50
+Enter number of disk requests (1-100): 7
+Enter request 1 (0-199): 82
+Enter request 2 (0-199): 170
+Enter request 3 (0-199): 43
+Enter request 4 (0-199): 140
+Enter request 5 (0-199): 24
+Enter request 6 (0-199): 16
+Enter request 7 (0-199): 190
+
+====================================================
+            FCFS DISK SCHEDULING RESULT
+====================================================
+Initial Head Position : 50
+Request Queue : 82 170 43 140 24 16 190 
+
+Head Movement Sequence:
+50 -> 82 -> 170 -> 43 -> 140 -> 24 -> 16 -> 190
+
+Step-by-Step Calculation:
+Step 1: 50 -> 82 = |82 - 50| = 32
+Step 2: 82 -> 170 = |170 - 82| = 88
+Step 3: 170 -> 43 = |43 - 170| = 127
+Step 4: 43 -> 140 = |140 - 43| = 97
+Step 5: 140 -> 24 = |24 - 140| = 116
+Step 6: 24 -> 16 = |16 - 24| = 8
+Step 7: 16 -> 190 = |190 - 16| = 174
+
+Total Head Movement : 642 cylinders
+Average Head Movement : 91.71 cylinders per request
+====================================================
